@@ -1,0 +1,20 @@
+[project]
+name = "ass-punctuation-fixer"
+version = "1.0.0"
+description = "Web application to fix reversed punctuation marks in ASS subtitle files"
+dependencies = [
+    "Flask>=3.0.0",
+    "Werkzeug>=3.0.1",
+    "gunicorn>=21.2.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8"
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
