@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إصلاح علامات الترقيم في ملفات الترجمة ASS</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header text-center">
+                        <h1 class="card-title mb-0">
+                            <i class="fas fa-file-alt me-2"></i>
+                            إصلاح علامات الترقيم
+                        </h1>
+                        <p class="text-muted mt-2">إصلاح علامات الترقيم المعكوسة في ملفات الترجمة ASS</p>
+                    </div>
+                    <div class="card-body">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                                        <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <div class="info-box mb-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-info-circle text-info me-2"></i>
+                                <h5 class="mb-0">ماذا يفعل هذا التطبيق؟</h5>
+                            </div>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>يصحح علامات الترقيم المعكوسة في ملفات ASS</li>
+                                <li><i class="fas fa-check text-success me-2"></i>ينقل علامات الترقيم من بداية النص إلى نهايته</li>
+                                <li><i class="fas fa-check text-success me-2"></i>يحافظ على تنسيق الملف الأصلي</li>
+                                <li><i class="fas fa-check text-success me-2"></i>يعرض معاينة للتغييرات قبل التحميل</li>
+                            </ul>
+                        </div>
+
+                        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" id="uploadForm">
+                            <div class="mb-4">
+                                <label for="file" class="form-label">
+                                    <i class="fas fa-upload me-2"></i>
+                                    اختر ملف الترجمة ASS
+                                </label>
+                                <input type="file" class="form-control" id="file" name="file" accept=".ass" required>
+                                <div class="form-text">
+                                    <i class="fas fa-file-code me-1"></i>
+                                    الملفات المدعومة: .ass فقط (الحد الأقصى: 16 ميجابايت)
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                    <span class="btn-text">
+                                        <i class="fas fa-magic me-2"></i>
+                                        إصلاح الترقيم
+                                    </span>
+                                    <span class="btn-loading d-none">
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                        جاري المعالجة...
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="mt-4 pt-4 border-top">
+                            <h6 class="text-muted mb-3">
+                                <i class="fas fa-lightbulb me-2"></i>
+                                أمثلة على التصحيحات:
+                            </h6>
+                            <div class="example-box">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="example-item before">
+                                            <small class="text-muted">قبل:</small>
+                                            <div class="code-text">!مرحباً بك</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="example-item after">
+                                            <small class="text-muted">بعد:</small>
+                                            <div class="code-text">مرحباً بك!</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-6">
+                                        <div class="example-item before">
+                                            <small class="text-muted">قبل:</small>
+                                            <div class="code-text">؟كيف حالك</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="example-item after">
+                                            <small class="text-muted">بعد:</small>
+                                            <div class="code-text">كيف حالك؟</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
