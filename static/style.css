@@ -1,0 +1,176 @@
+/* تحسينات للغة العربية والتصميم العام */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+}
+
+/* تحسين عرض الأكواد والنصوص العربية */
+.code-text {
+    font-family: 'Courier New', Consolas, 'Liberation Mono', monospace;
+    background-color: var(--bs-gray-800);
+    border: 1px solid var(--bs-gray-700);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    word-break: break-all;
+    direction: rtl;
+}
+
+/* صندوق المعلومات */
+.info-box {
+    background-color: var(--bs-gray-900);
+    border: 1px solid var(--bs-gray-700);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+/* أمثلة التصحيحات */
+.example-box {
+    background-color: var(--bs-gray-900);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.example-item {
+    margin-bottom: 10px;
+}
+
+.example-item.before .code-text {
+    border-color: var(--bs-danger);
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.example-item.after .code-text {
+    border-color: var(--bs-success);
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+/* تحسين عرض التغييرات */
+.changes-container {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.change-item {
+    background-color: var(--bs-gray-900);
+    border-color: var(--bs-gray-700) !important;
+}
+
+.change-header {
+    border-bottom: 1px solid var(--bs-gray-700);
+    padding-bottom: 8px;
+}
+
+.before-text .code-text {
+    border-color: var(--bs-danger);
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.after-text .code-text {
+    border-color: var(--bs-success);
+    background-color: rgba(25, 135, 84, 0.1);
+}
+
+/* تحسين الأزرار */
+.btn-lg {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+}
+
+/* تحسين الكارد */
+.card {
+    border: 1px solid var(--bs-gray-700);
+    background-color: var(--bs-gray-800);
+}
+
+.card-header {
+    background-color: var(--bs-gray-900);
+    border-bottom: 1px solid var(--bs-gray-700);
+}
+
+/* تحسين الإدخال */
+.form-control {
+    background-color: var(--bs-gray-900);
+    border-color: var(--bs-gray-700);
+    color: var(--bs-light);
+}
+
+.form-control:focus {
+    background-color: var(--bs-gray-900);
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* تحسين التنبيهات */
+.alert {
+    border: 1px solid;
+}
+
+.alert-success {
+    background-color: rgba(25, 135, 84, 0.1);
+    border-color: var(--bs-success);
+}
+
+.alert-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: var(--bs-danger);
+}
+
+.alert-info {
+    background-color: rgba(13, 110, 253, 0.1);
+    border-color: var(--bs-info);
+}
+
+/* تحسين التمرير */
+.changes-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.changes-container::-webkit-scrollbar-track {
+    background: var(--bs-gray-800);
+    border-radius: 4px;
+}
+
+.changes-container::-webkit-scrollbar-thumb {
+    background: var(--bs-gray-600);
+    border-radius: 4px;
+}
+
+.changes-container::-webkit-scrollbar-thumb:hover {
+    background: var(--bs-gray-500);
+}
+
+/* تحسين المسافات للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .code-text {
+        font-size: 0.8em;
+        padding: 6px 8px;
+    }
+    
+    .action-buttons .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* تحسين حالة التحميل */
+.btn-loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* تحسين الأيقونات */
+.fas, .far, .fab {
+    vertical-align: baseline;
+}
+
+/* تحسين النصوص المكسورة */
+.text-break {
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+}
