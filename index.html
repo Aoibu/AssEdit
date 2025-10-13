@@ -34,30 +34,46 @@ body {
   z-index: 1;
 }
 
-  .label {
-    font-size: 1.6em;
-    color: #0ff;
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px #0ff;
-  }
+/* صندوق المحتوى المركزي */
+.container {
+  max-width: 300px;  /* أصغر من قبل */
+  width: 85%;        /* نسبة مناسبة للشاشة */
+  text-align: center;
+  padding: 20px 15px; /* تقليل المسافة الداخلية */
+  border-radius: 15px;
+  background: rgba(20, 20, 30, 0.6);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 0 20px rgba(0,255,255,0.2), 0 0 40px rgba(0,255,255,0.1) inset;
+  z-index: 1;
+}
 
-  .price {
-    font-size: 4em;
-    font-weight: 700;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    transition: all 0.5s ease;
-    text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
-  }
+/* نص "أونصة الفضة" */
+.label {
+  font-size: 1.2em;  /* أصغر من قبل */
+  color: #0ff;
+  margin-bottom: 10px;
+  text-shadow: 0 0 8px #0ff;
+}
 
-  .arrow {
-    margin-left: 15px;
-    font-size: 1.8em;
-    transition: all 0.5s ease;
-    text-shadow: 0 0 8px #0ff;
-  }
+/* سعر الفضة */
+.price {
+  font-size: 2.5em;  /* تصغير السعر */
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  transition: all 0.5s ease;
+  text-shadow: 0 0 8px #0ff, 0 0 16px #0ff;
+}
+
+/* السهم */
+.arrow {
+  margin-left: 10px;
+  font-size: 1.2em; /* أصغر */
+  transition: all 0.5s ease;
+  text-shadow: 0 0 6px #0ff;
+}
 
   .price.up {
     color: #4ade80;
