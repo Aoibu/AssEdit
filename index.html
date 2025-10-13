@@ -137,40 +137,53 @@ body {
 <script>
   let lastPrice = null;
 
-  async function getSilverPrice() {
-    try {
-      const response = await fetch('https://www.goldapi.io/api/XAG/USD', {
-        method: 'GET',
-        headers: {
-          'x-access-token': 'goldapi-1s8zsmgoz8p7z-io', // ضع مفتاح API الخاص بك هنا
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await response.json();
-      const price = parseFloat(data.price).toFixed(2);
-      const priceElement = document.getElementById('silverPrice');
-      const arrow = document.getElementById('arrow');
-
-      if (lastPrice !== null) {
-        if (price > lastPrice) {
-          priceElement.classList.add('up');
-          priceElement.classList.remove('down');
-          arrow.textContent = '⬆';
-          arrow.classList.add('up');
-          arrow.classList.remove('down');
-        } else if (price < lastPrice) {
-          priceElement.classList.add('down');
-          priceElement.classList.remove('up');
-          arrow.textContent = '⬇';
-          arrow.classList.add('down');
-          arrow.classList.remove('up');
-        } else {
-          priceElement.classList.remove('up','down');
-          arrow.textContent = '↔';
-          arrow.classList.remove('up','down');
-        }
+async function getSilverPrice() {
+  try {
+    const response = await fetch('https://www.goldapi.io/api/XAG/USD', {
+      method: 'GET',
+      headers: {
+        'x-access-token': 'goldapi-1s8zsmgoz8p7z-io', // ضع مفتاحك هنا
+        'Content-Type': 'application/json'
       }
+    });
+
+    const data = await response.json();
+    const price = parseFloat(data.price).toFixed(2); // هنا نقرأ السعر بشكل صحيح
+    const priceElement = document.getElementById('silverPrice');
+    const arrow = document.getElementById('arrow');
+
+    if (lastPrice !== null) {
+      if (price > lastPrice) {
+        priceElement.classList.add('up');
+        priceElement.classList.remove('down');
+        arrow.textContent = '⬆';
+        arrow.classList.add('up');
+        arrow.classList.remove('down');
+      } else if (price < lastPrice) {
+        priceElement.classList.add('down');
+        priceElement.classList.remove('up');
+        arrow.textContent = '⬇';
+        arrow.classList.add('down');
+        arrow.classList.remove('up');
+      } else {
+        priceElement.classList.remove('up','down');
+        arrow.textContent = '↔';
+        arrow.classList.remove('up','down');
+      }
+    }
+
+    priceElement.childNodes[0].nodeValue = price + " USD ";
+    lastPrice = price;
+
+  } catch (error) {
+    const priceElement = document.getElementById('silverPrice');
+    const arrow = document.getElementById('arrow');
+    priceElement.childNodes[0].nodeValue = "خطأ في جلب السعر ";
+    arrow.textContent = '⚠';
+    priceElement.classList.remove('up','down');
+    arrow.classList.remove('up','down');
+  }
+}
 
       priceElement.childNodes[0].nodeValue = price + " USD ";
       lastPrice = price;
