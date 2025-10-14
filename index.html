@@ -139,10 +139,10 @@ body {
 
   async function getSilverPrice() {
     try {
-      const response = await fetch('https://www.goldapi.io/api/XAG/USD', {
+      const response = await fetch('https://gold.g.apised.com/v1/latest?metals=XAG&base_currency=USD&currencies=USD&weight_unit=kg', {
         method: 'GET',
         headers: {
-          'x-access-token': 'goldapi-3tnrl19mgpxxjvy-io',
+          'x-access-token': 'sk_60eb336567d37927eF4cb527e9644cAb1a55a29061bc9AE3',
           'Content-Type': 'application/json'
         }
       });
