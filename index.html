@@ -139,16 +139,10 @@ body {
 
 async function getSilverPrice() {
   try {
-    const response = await fetch('https://www.goldapi.io/api/XAG/USD', {
-      method: 'GET',
-      headers: {
-        'x-access-token': 'goldapi-1s8zsmgoz8p7z-io', // ضع مفتاحك هنا
-        'Content-Type': 'application/json'
-      }
-    });
-
+    const response = await fetch("https://api.metals.live/v1/spot/silver");
     const data = await response.json();
-    const price = parseFloat(data.price).toFixed(2); // هنا نقرأ السعر بشكل صحيح
+    const price = parseFloat(data[0][1]).toFixed(2);
+
     const priceElement = document.getElementById('silverPrice');
     const arrow = document.getElementById('arrow');
 
