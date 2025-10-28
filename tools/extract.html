@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>فصل الصوت — Neon Tools</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body data-tool="extract" class="tool-page">
+  <div class="neon-gradient-bg"></div>
+  <div class="tool-wrap">
+    <div class="tool-header">
+      <div>
+        <h2 class="tool-title">فصل الصوت عن الفيديو</h2>
+        <p class="note">استخراج MP3 من ملفات الفيديو في المتصفح (ffmpeg.wasm)</p>
+      </div>
+      <div><button class="back-btn">⬅️ الرئيسية</button></div>
+    </div>
+
+    <div class="panel">
+      <div class="input-row">
+        <input id="extractFile" class="file-input" type="file" accept="video/*">
+        <button id="extractBtn" class="action-btn">استخراج</button>
+      </div>
+      <div class="progress" id="extractProgress"><i style="width:0%"></i></div>
+      <div id="extractOutput" class="panel" style="margin-top:12px">النتيجة ستظهر هنا.</div>
+    </div>
+  </div>
+
+  <script src="../script.js"></script>
+</body>
+</html>
