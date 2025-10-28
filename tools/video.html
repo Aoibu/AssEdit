@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>تحويل فيديو — Neon Tools</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body data-tool="video" class="tool-page">
+  <div class="neon-gradient-bg"></div>
+  <div class="tool-wrap">
+    <div class="tool-header">
+      <div>
+        <h2 class="tool-title">تحويل فيديو</h2>
+        <p class="note">ادعم MP4 وغيرها — التحويل يتم داخل المتصفح باستخدام ffmpeg.wasm</p>
+      </div>
+      <div>
+        <button class="back-btn">⬅️ الرئيسية</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="input-row">
+        <input id="videoFile" class="file-input" type="file" accept="video/*">
+        <select id="videoTarget" class="file-input">
+          <option value="webm">webm</option>
+          <option value="mp4">mp4</option>
+          <option value="gif">gif (مقتطع، قصير)</option>
+        </select>
+        <button id="videoConvert" class="action-btn">ابدأ التحويل</button>
+      </div>
+      <div class="progress"><i style="width:0%"></i></div>
+      <div id="videoOutput" class="panel" style="margin-top:12px">النتيجة ستظهر هنا.</div>
+    </div>
+  </div>
+
+  <script src="../script.js"></script>
+</body>
+</html>
