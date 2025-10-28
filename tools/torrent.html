@@ -1,16 +1,43 @@
 <!DOCTYPE html>
 <html lang="ar">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>تورنت — Aoibu Tools</title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تورنت — Neon Tools</title>
+
+  <!-- رابط إلى CSS الرئيسي للمشروع (تأكد أن المسار صحيح) -->
   <link rel="stylesheet" href="../style.css">
+
+  <style>
+    /* تحسينات موضعية لصفحة التورنت فقط */
+    .torrent-top {
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:12px;
+    }
+    .torrent-actions { display:flex; gap:10px; align-items:center; }
+    .small-note { font-size:0.9rem; color: #9fbecb; margin-top:8px; }
+    .spinner { border:4px solid rgba(255,255,255,0.06); border-top:4px solid rgba(255,255,255,0.12); border-radius:50%; width:26px; height:26px; animation: spin 1s linear infinite; display:inline-block; vertical-align:middle; margin-left:8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .file-list ul { list-style: none; padding:0; margin:0; }
+    .file-list li { padding:10px; border-bottom:1px dashed rgba(255,255,255,0.03); display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap; }
+    .file-meta { color:#bfeffb; font-size:0.95rem; }
+    .tag { padding:6px 10px; border-radius:8px; background:rgba(0,255,163,0.06); color:#bdf; font-weight:600; font-size:0.85rem }
+    .danger { background: linear-gradient(90deg,#ff6b6b,#ff3b3b); color:#100; padding:6px 10px; border-radius:8px; cursor:pointer; border:none; }
+    .muted { color:#8ea; font-size:0.9rem }
+    .controls { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  </style>
 </head>
 <body data-tool="torrent" class="tool-page">
   <div class="neon-gradient-bg"></div>
+
   <div class="tool-wrap">
     <div class="tool-header">
       <div>
         <h2 class="tool-title">تورنت</h2>
-        <p class="note">رفع ملف .torrent لعرض الملفات الموجودة أو لصق رابط magnet.</p>
+        <p class="note">ارفع ملف <code>.torrent</code> أو ألصق رابط <code>magnet:</code> لعرض الملفات الموجودة داخل التورنت — هذه الصفحة تتواصل مع السيرفر ليتم فك التورنت وإتاحة روابط التحميل.</p>
       </div>
       <div>
         <button class="back-btn">⬅️ الرئيسية</button>
@@ -18,14 +45,197 @@
     </div>
 
     <div class="panel">
-      <div class="input-row">
-        <input id="torrentFile" class="file-input" type="file" accept=".torrent">
-        <button id="magnetBtn" class="action-btn">لصق Magnet</button>
+      <div class="torrent-top">
+        <div class="input-row">
+          <label class="file-input" title="اختيار ملف .torrent">
+            اختر ملف .torrent
+            <input id="torrentFile" type="file" accept=".torrent" style="display:none">
+          </label>
+
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button id="pasteMagnet" class="action-btn">لصق Magnet</button>
+            <button id="refreshList" class="action-btn" title="تحديث حالة التورنت">تحديث</button>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button id="clearBtn" class="back-btn">مسح العرض</button>
+          <span id="statusTag" class="tag muted">لم يتم تحميل شيء</span>
+        </div>
       </div>
-      <div id="torrentOutput" class="panel" style="margin-top:14px">لم يتم تحميل أي تورنت بعد...</div>
+
+      <div id="torrentOutput" class="file-list panel" style="min-height:120px">
+        <p class="muted">لم يتم تحميل أي تورنت بعد...</p>
+      </div>
+
+      <p class="small-note">ملاحظة أمان: تأكد أن المحتوى قانوني قبل تنزيله. السيرفر سيحفظ مؤقتاً الملفات في مجلد التنزيلات على الخادم.</p>
     </div>
   </div>
 
-  <script src="../script.js"></script>
+  <!-- سكربت الصفحة (كامل) -->
+  <script>
+  (function(){
+    // عناصر الواجهة
+    const fileInput = document.getElementById('torrentFile');
+    const pasteMagnetBtn = document.getElementById('pasteMagnet');
+    const torrentOutput = document.getElementById('torrentOutput');
+    const statusTag = document.getElementById('statusTag');
+    const backBtn = document.querySelector('.back-btn');
+    const refreshBtn = document.getElementById('refreshList');
+    const clearBtn = document.getElementById('clearBtn');
+
+    // تعيين زر الرجوع
+    if (backBtn) backBtn.addEventListener('click', () => window.location.href = '../index.html');
+
+    // دوال مساعدة
+    function formatBytes(bytes){
+      if (!bytes && bytes !== 0) return '';
+      if (bytes === 0) return '0 B';
+      const k = 1024;
+      const sizes = ['B','KB','MB','GB','TB'];
+      const i = Math.floor(Math.log(bytes)/Math.log(k));
+      return parseFloat((bytes/Math.pow(k,i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function showStatus(text, busy=false){
+      statusTag.textContent = text;
+      if (busy){
+        if (!statusTag.querySelector('.spinner')) {
+          const s = document.createElement('span');
+          s.className = 'spinner';
+          statusTag.prepend(s);
+        }
+      } else {
+        const s = statusTag.querySelector('.spinner');
+        if (s) s.remove();
+      }
+    }
+
+    function renderTorrent(data){
+      // data: { infoHash, name, files: [{name,length}, ...] }
+      const name = data.name || data.infoHash;
+      const files = data.files || [];
+
+      const html = [];
+      html.push('<h3 style="margin-top:0;color:#bff">📦 ' + escapeHtml(name) + '</h3>');
+      if (!files.length) {
+        html.push('<p class="muted">لا توجد ملفات ظاهرة داخل التورنت.</p>');
+      } else {
+        html.push('<ul>');
+        files.forEach((f, i) => {
+          const dl = `/download/${encodeURIComponent(data.infoHash)}/${i}`;
+          html.push(`<li>
+                       <div class="file-meta">${escapeHtml(f.name)}</div>
+                       <div style="display:flex;gap:8px;align-items:center">
+                         <div class="muted">${formatBytes(f.length)}</div>
+                         <a class="result-link" href="${dl}">⬇️ تحميل</a>
+                       </div>
+                     </li>`);
+        });
+        html.push('</ul>');
+      }
+      html.push(`<p class="small-note">InfoHash: <span class="muted">${escapeHtml(data.infoHash)}</span></p>`);
+      torrentOutput.innerHTML = html.join('');
+    }
+
+    function escapeHtml(s){
+      if (!s) return '';
+      return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; });
+    }
+
+    // رفع ملف .torrent
+    fileInput.addEventListener('change', async () => {
+      const f = fileInput.files[0];
+      if (!f) return;
+      try {
+        showStatus('جارٍ رفع ملف التورنت...', true);
+        torrentOutput.innerHTML = `<p class="muted">⏳ جاري رفع الملف إلى السيرفر...</p>`;
+        const fd = new FormData();
+        fd.append('torrent', f);
+        const res = await fetch('/upload-torrent', { method: 'POST', body: fd });
+        if (!res.ok) throw new Error('فشل الجلب من السيرفر: ' + res.statusText);
+        const data = await res.json();
+        showStatus('تورنت مُضاف: ' + (data.name || data.infoHash), false);
+        renderTorrent(data);
+      } catch (err) {
+        showStatus('خطأ', false);
+        torrentOutput.innerHTML = `<p class="muted">خطأ: ${escapeHtml(err.message)}</p>`;
+        console.error(err);
+      }
+    });
+
+    // لصق magnet
+    pasteMagnetBtn.addEventListener('click', async () => {
+      const magnet = prompt('ألصق رابط magnet هنا:');
+      if (!magnet) return;
+      try {
+        showStatus('جارٍ إضافة magnet...', true);
+        torrentOutput.innerHTML = `<p class="muted">⏳ جاري إرسال magnet إلى السيرفر...</p>`;
+        const res = await fetch('/add-magnet', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ magnet })
+        });
+        if (!res.ok) throw new Error('فشل: ' + res.statusText);
+        const data = await res.json();
+        showStatus('تورنت مُضاف: ' + (data.name || data.infoHash), false);
+        renderTorrent(data);
+      } catch (err) {
+        showStatus('خطأ', false);
+        torrentOutput.innerHTML = `<p class="muted">خطأ: ${escapeHtml(err.message)}</p>`;
+        console.error(err);
+      }
+    });
+
+    // زر التحديث: يعيد عرض آخر تورنت إن وُجد (محدود - يعتمد على رد السيرفر في كل إضافة)
+    refreshBtn.addEventListener('click', async () => {
+      // لا يوجد endpoint للجلب العام في السيرفر الافتراضي، لذلك نحتفظ بأحدث عرض في العنصر نفسه
+      if (torrentOutput.innerHTML.trim() === '' || torrentOutput.innerHTML.includes('لم يتم تحميل')) {
+        torrentOutput.innerHTML = `<p class="muted">لا توجد بيانات لعرضها. ارفع تورنت أو ألصق magnet أولاً.</p>`;
+      } else {
+        // نخلي المؤثر البسيط
+        showStatus('محدث', false);
+        // لا نعيد جلب من السيرفر لأن الخادم لا يملك endpoint عام للحالة.
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      torrentOutput.innerHTML = `<p class="muted">تم المسح — لم يتم تحميل أي تورنت بعد...</p>`;
+      showStatus('فارغ', false);
+      fileInput.value = '';
+    });
+
+    // تحسين: دعم السحب والإفلات لرفع .torrent
+    ;(function enableDragDrop(){
+      const panel = torrentOutput;
+      panel.addEventListener('dragover', e => { e.preventDefault(); panel.style.outline = '2px dashed rgba(0,255,163,0.12)'; });
+      panel.addEventListener('dragleave', e => { e.preventDefault(); panel.style.outline = 'none'; });
+      panel.addEventListener('drop', async (e) => {
+        e.preventDefault(); panel.style.outline = 'none';
+        const f = e.dataTransfer.files && e.dataTransfer.files[0];
+        if (!f) return;
+        if (!f.name.endsWith('.torrent')) {
+          torrentOutput.innerHTML = `<p class="muted">الملف المسحوب ليس بصيغة .torrent</p>`;
+          return;
+        }
+        // ضع الملف في العنصر input ثم نفّذ نفس عملية الرفع
+        fileInput.files = e.dataTransfer.files;
+        // نفّذ رفع
+        const event = new Event('change');
+        fileInput.dispatchEvent(event);
+      });
+      // دليل للمستخدم
+      const note = document.createElement('p');
+      note.className = 'muted';
+      note.style.marginTop = '8px';
+      note.textContent = 'يمكنك سحب ملف .torrent وإفلاته هنا أيضاً.';
+      panel.parentNode.insertBefore(note, panel.nextSibling);
+    })();
+
+    // عند تحميل الصفحة: عرض رسالة حالة افتراضية
+    showStatus('جاهز', false);
+
+  })();
+  </script>
 </body>
 </html>
