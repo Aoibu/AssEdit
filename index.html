@@ -1,192 +1,69 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أونصة الفضة - Neon Glass</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-<style>
-  /* ======== خلفية داكنة مع تأثير نيون ======== */
-body {
-  margin: 0;
-  padding: 20px; /* مسافة من الحواف */
-  font-family: 'Cairo', 'Orbitron', sans-serif;
-  background: #0f0f0f; /* خلفية داكنة */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-  box-sizing: border-box; /* يجعل padding داخلي محسوب */
-}
-
-/* صندوق المحتوى المركزي */
-.container {
-  max-width: 400px; /* أقصى عرض للصندوق */
-  width: 90%; /* نسبة عرض الشاشة */
-  text-align: center;
-  padding: 40px 30px; /* مسافة داخلية من كل الجهات */
-  border-radius: 20px;
-  background: rgba(20, 20, 30, 0.6);
-  backdrop-filter: blur(15px);
-  box-shadow: 0 0 30px rgba(0,255,255,0.2), 0 0 60px rgba(0,255,255,0.1) inset;
-  z-index: 1;
-}
-
-/* صندوق المحتوى المركزي */
-.container {
-  max-width: 300px;  /* أصغر من قبل */
-  width: 85%;        /* نسبة مناسبة للشاشة */
-  text-align: center;
-  padding: 20px 15px; /* تقليل المسافة الداخلية */
-  border-radius: 15px;
-  background: rgba(20, 20, 30, 0.6);
-  backdrop-filter: blur(15px);
-  box-shadow: 0 0 20px rgba(0,255,255,0.2), 0 0 40px rgba(0,255,255,0.1) inset;
-  z-index: 1;
-}
-
-/* نص "أونصة الفضة" */
-.label {
-  font-size: 1.2em;  /* أصغر من قبل */
-  color: #0ff;
-  margin-bottom: 10px;
-  text-shadow: 0 0 8px #0ff;
-}
-
-/* سعر الفضة */
-.price {
-  font-size: 2.5em;  /* تصغير السعر */
-  font-weight: 700;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-  transition: all 0.5s ease;
-  text-shadow: 0 0 8px #0ff, 0 0 16px #0ff;
-}
-
-/* السهم */
-.arrow {
-  margin-left: 10px;
-  font-size: 1.2em; /* أصغر */
-  transition: all 0.5s ease;
-  text-shadow: 0 0 6px #0ff;
-}
-
-  .price.up {
-    color: #4ade80;
-    text-shadow: 0 0 15px #4ade80, 0 0 25px #4ade80;
-  }
-
-  .price.down {
-    color: #f87171;
-    text-shadow: 0 0 15px #f87171, 0 0 25px #f87171;
-  }
-
-  .arrow.up {
-    transform: translateY(-8px);
-    color: #4ade80;
-    text-shadow: 0 0 12px #4ade80;
-  }
-
-  .arrow.down {
-    transform: translateY(8px);
-    color: #f87171;
-    text-shadow: 0 0 12px #f87171;
-  }
-
-  /* تأثير نبض خفيف للـ neon */
-  @keyframes neonPulse {
-    0%,100% { text-shadow: 0 0 10px #0ff,0 0 20px #0ff; }
-    50% { text-shadow: 0 0 20px #0ff,0 0 40px #0ff; }
-  }
-
-  .label {
-    animation: neonPulse 2s infinite;
-  }
-
-  /* خلفية متحركة */
-  body::before {
-    content: "";
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at center, rgba(0,255,255,0.05), transparent 70%);
-    animation: rotate 25s linear infinite;
-    z-index: 0;
-  }
-
-  @keyframes rotate {
-    0% { transform: rotate(0deg) translate(-50%, -50%); }
-    100% { transform: rotate(360deg) translate(-50%, -50%); }
-  }
-
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Neon Tools Hub</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-<div class="container">
-  <div class="label">أونصة الفضة</div>
-  <div class="price" id="silverPrice">
-    --- USD
-    <span class="arrow" id="arrow">↔</span>
-  </div>
-</div>
+<body class="tool-dashboard">
+  <div class="neon-gradient-bg"></div>
 
-<script>
-  let lastPrice = null;
+  <header class="topbar">
+    <h1 class="neon-title">Neon Tools Hub</h1>
+    <p class="subtitle">أدوات تحويل وضغط وفصل صوت وتورنت — تصميم نيون متدرّج</p>
+  </header>
 
-  async function getSilverPrice() {
-    try {
-      const response = await fetch('https://gold.g.apised.com/v1/latest?metals=XAG&base_currency=USD&currencies=USD&weight_unit=kg', {
-        method: 'GET',
-        headers: {
-          'x-access-token': 'sk_60eb336567d37927eF4cb527e9644cAb1a55a29061bc9AE3',
-          'Content-Type': 'application/json'
-        }
-      });
+  <main class="container">
+    <section class="cards">
+      <a class="card" href="tools/torrent.html">
+        <div class="card-icon">🧩</div>
+        <h3>تورنت</h3>
+        <p>عرض محتويات .torrent أو magnet (واجهة)</p>
+      </a>
 
-      const data = await response.json();
-      const price = parseFloat(data.price).toFixed(2);
-      const priceElement = document.getElementById('silverPrice');
-      const arrow = document.getElementById('arrow');
+      <a class="card" href="tools/video.html">
+        <div class="card-icon">🎬</div>
+        <h3>تحويل فيديو</h3>
+        <p>MP4 → WebM / MKV / GIF ...</p>
+      </a>
 
-      if (lastPrice !== null) {
-        if (price > lastPrice) {
-          priceElement.classList.add('up');
-          priceElement.classList.remove('down');
-          arrow.textContent = '⬆';
-          arrow.classList.add('up');
-          arrow.classList.remove('down');
-        } else if (price < lastPrice) {
-          priceElement.classList.add('down');
-          priceElement.classList.remove('up');
-          arrow.textContent = '⬇';
-          arrow.classList.add('down');
-          arrow.classList.remove('up');
-        } else {
-          priceElement.classList.remove('up','down');
-          arrow.textContent = '↔';
-          arrow.classList.remove('up','down');
-        }
-      }
+      <a class="card" href="tools/audio.html">
+        <div class="card-icon">🎵</div>
+        <h3>تحويل صوت</h3>
+        <p>MP3 → WAV / AAC / FLAC / OGG</p>
+      </a>
 
-      priceElement.childNodes[0].nodeValue = price + " USD ";
-      lastPrice = price;
+      <a class="card" href="tools/image.html">
+        <div class="card-icon">🖼️</div>
+        <h3>تحويل صور</h3>
+        <p>PNG ↔ JPG ↔ WEBP / تغيير الحجم</p>
+      </a>
 
-    } catch (error) {
-      const priceElement = document.getElementById('silverPrice');
-      const arrow = document.getElementById('arrow');
-      priceElement.childNodes[0].nodeValue = "خطأ في جلب السعر ";
-      arrow.textContent = '⚠';
-      priceElement.classList.remove('up','down');
-      arrow.classList.remove('up','down');
-    }
-  }
+      <a class="card" href="tools/compress.html">
+        <div class="card-icon">📦</div>
+        <h3>ضغط ملفات</h3>
+        <p>ضغط فيديو/صورة لتقليل الحجم</p>
+      </a>
 
-  getSilverPrice();
-  setInterval(getSilverPrice, 1000); // كل 10 ثوانٍ بدل 1 ثانية
-</script>
+      <a class="card" href="tools/extract.html">
+        <div class="card-icon">🔊</div>
+        <h3>فصل الصوت</h3>
+        <p>استخراج MP3 / WAV من الفيديو</p>
+      </a>
+
+      <a class="card" href="tools/universal.html">
+        <div class="card-icon">⚙️</div>
+        <h3>محول شامل</h3>
+        <p>اختر ملف ونوع التحويل الهدف</p>
+      </a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© Neon Tools Hub — واجهة front-end تعمل على GitHub Pages</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
