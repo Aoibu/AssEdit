@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>تورنت — Aoibu Tools</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body data-tool="torrent" class="tool-page">
+  <div class="neon-gradient-bg"></div>
+  <div class="tool-wrap">
+    <div class="tool-header">
+      <div>
+        <h2 class="tool-title">تورنت</h2>
+        <p class="note">رفع ملف .torrent لعرض الملفات الموجودة أو لصق رابط magnet.</p>
+      </div>
+      <div>
+        <button class="back-btn">⬅️ الرئيسية</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="input-row">
+        <input id="torrentFile" class="file-input" type="file" accept=".torrent">
+        <button id="magnetBtn" class="action-btn">لصق Magnet</button>
+      </div>
+      <div id="torrentOutput" class="panel" style="margin-top:14px">لم يتم تحميل أي تورنت بعد...</div>
+    </div>
+  </div>
+
+  <script src="../script.js"></script>
+</body>
+</html>
